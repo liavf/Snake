@@ -1,0 +1,32 @@
+
+init:
+board.add_snake_to_board()
+board.add_bomb()
+for i in range(3):
+    board.add_apple()
+end_round
+
+every turn:
+movekey = input()
+snake.move(movekey)
+head_loc = snake.head_loc \ snake.get_requirements
+if head_loc in board.taken_coordinates:
+    obj = type(board.taken_coordinates[head_loc])
+    if obj == apple:
+        gz.score += apple.score
+        board.del_apple()
+    if obj == bomb:
+        break
+    if obj == snake:
+        break
+    if board.check_borders(head_loc):
+        break
+bomb.update_timer()
+get bomb.location()
+check bomb_loc == snake or apple location
+board.update_bomb_loc()
+board.add_apple - add up to 3
+gz.draw_cell(board)
+if bomb.finished(): board.add_bomb()
+end_round
+
