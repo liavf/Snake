@@ -1,0 +1,58 @@
+
+
+Game
+- init(self, GameDisplay, Parameters, Board, score = 0, )
+
+--> __single_turn
+--> game_loop
+--> init_game():
+---->
+timinig
+--> snake ate apple
+--> bomb
+
+is game over()
+
+
+Board:
+- init(self, width, hight, turn, apple_list, bomb_list, snake):
+- cell content(location):
+- add apple
+- add bomb
+- add snake
+- move_snake
+- remove apple
+- remove_bomb
+- shockwave_bomb(time)
+--> gets the next shockeave locations and updates cell contets
+
+
+
+
+Snake:
+init(self, size, direction, head_location):
+-move_snake(movekey):
+---> check if legal (dont do down if direction is up)
+--> return new head_location
+-get_locations()
+-update_size():
+-->size += 1
+-is_growing() -> True False
+-->update size in 1
+
+
+
+Bomb
+init(self, location, timer, radius)
+--> timer, raduis = get_random_bomb_data()
+-get_timer(timer)
+- update_timer()
+-get_shockwave_location(bomb_index, locations, timer)
+
+
+Apple:
+init(self, location, score, Parameters?)
+--> location, score = get_random_apple_data()
+--> color = green
+--> size = 1
+
