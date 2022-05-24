@@ -13,7 +13,28 @@ class Snake:
     def get_coordinates(self, coordinates):
         return self.coordinates
 
-    def move_snake(self, movekey, is_growing):
+    def movement_requirements(self, movekey):
+        #todo: do we want to be able to move few steps at a time? return a
+        # list?
+        """
+        returns the cell requirement for move by movekey, or False if the
+        movekey doesn't match direction
+        :param movekey:
+        :return:
+        """
+        head_location = self.coordinates[0]
+        if movekey == UP and self.direction != DOWN:
+            return head_location[0], head_location[1] + 1
+        elif movekey == DOWN and self.direction != UP:
+            return head_location[0], head_location[1] - 1
+        elif movekey == LEFT and self.direction != RIGHT:
+            return head_location[0] - 1, head_location[1]
+        elif movekey == RIGHT and self.direction != LEFT:
+            return head_location[0] + 1, head_location[1]
+        else: #unkown move
+            return False
+
+    def move_snake(self, movekey):
         """
         Updates snakes locations based on move.
         :param movekey: move direction
@@ -22,23 +43,10 @@ class Snake:
         :return: True for success, else False (in case of unkown movekey or
         movekey that does not match the current direction).
         """
-        head_location = self.coordinates[0]
-        if movekey == UP and self.direction != DOWN:
-            new_head_location = head_location[0], head_location[1] + 1
-        elif movekey = DOWN and self.direction != UP:
-            new_head_location = head_location[0], head_location[1] - 1
-        elif movekey == LEFT and self.direction != RIGHT:
-            new_head_location = head_location[0] - 1, head_location[1]
-        elif movekey == RIGHT and self.direction != LEFT:
-            new_head_location = head_location[0] + 1, head_location[1]
-        else: #unkown move
-            return False
-
-        if new_head_location in self.coordinates(): #ovverrun itself
-            return False
-        else:
-            self.coordinates[0] = new_head_location
-            if not self.is_growing: #remove tail
+        head_location = self.movement_requirements(movekey)
+        if head_location:
+            self.coordinates[0] = head_location
+            if not self.is_growing:  # remove tail
                 self.coordinates.pop(-1)
             return True
-
+        return False
