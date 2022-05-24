@@ -1,6 +1,6 @@
 
 class Bomb:
-    def __init__(self, x, y, radius, time, is_shock):
+    def __init__(self, x, y, radius, time):
         self.location = (x, y)
         self.radius = radius
         self.time = time
@@ -11,26 +11,17 @@ class Bomb:
     def get_time(self):
         return self.time
 
-    def update_time(self):
-        self.time -= 1
-
-    def reg_turn(self):
-        self.update_time()
-        return self.location
-
-    def shock_turn(self):
-        loc = self.get_shock_location()
-        self.is_shock = True
-        self.update_shock_time()
-        return loc
-
-    def update_shock_time(self):
-        self.shock_timer += 1
+    def update_timer(self):
+        if self.time > 0:
+            self.time -= 1
+        else:
+            self.shock_timer += 1
+            self.is_shock = True
 
     def get_shock_couples(self):
         couples = []
         for i in range(self.shock_timer):
-            couples.append((i, self.radius - i))
+            couples.append((i, self.shock_timer - i))
         return couples
 
     def get_shock_location(self):
@@ -47,17 +38,17 @@ class Bomb:
                     coup_list.append(i)
         return coup_list
 
-    def do_turn(self):
-        if self.time >= 0:
-            return self.reg_turn()
-        else:
-            return self.shock_turn()
-
     def finished(self):
         if self.shock_timer == self.radius:
             return True
         else:
             return False
 
+    def get_location(self):
+        if self.time >= 0:
+            return self.location
+        else:
+            return self.get_shock_location()
 
-# get is shock
+    def get_shock_state(self):
+        return self.is_shock
