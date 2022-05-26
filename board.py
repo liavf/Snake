@@ -1,3 +1,5 @@
+from apple import *
+from bomb import *
 
 class Board:
     def __init__(self, width, height):
@@ -51,21 +53,21 @@ class Board:
 
     #### setters - add ####
 
-    def add_snake_to_board(self, snake):
+    def add_snake(self, snake):
         if self.legal_add(snake.get_coordinates()):
             self.snake = snake
 
-    def add_apple(self, params):
-        location, score = params.get_apple_parameters()
+    def add_apple(self):
+        location, score = get_apple_parameters()
         while not self.legal_add(location):
-            location, score = params.get_apple_parameters()
+            location, score = get_apple_parameters()
         apple = Apple(location, score)
         self.apples.append(apple)
 
-    def add_bomb(self, params):
-        x, y, radius, time = params.get_bomb_parameters()
+    def add_bomb(self):
+        x, y, radius, time = get_bomb_parameters()
         while not self.legal_add((x, y)):
-            x, y, radius, time = params.get_apple_parameters()
+            x, y, radius, time = get_apple_parameters()
         bomb = Bomb(x, y, radius, time)
         self.bombs.append(bomb)
 

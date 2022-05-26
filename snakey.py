@@ -30,15 +30,21 @@ class Node:
 
 
 class Snake:
-    def __init__(self, head=None, tail=None, direction, is_growing):
+    def __init__(self, head=None, tail=None, direction):
         self.head = head
         self.tail = tail
         self.length = 0
         self.direction = direction
-        self.is_growing = is_growing
+        self.apple_timer = 0
 
     def get_head(self):
         return self.head
+
+    def set_apple_timer(self, time):
+        self.apple_timer += time
+
+    def get_is_eating(self):
+        return self.apple_timer > 0
 
     def add_head(self, new_head):
         if self.head is None:
@@ -113,7 +119,7 @@ class Snake:
         head_location = self.movement_requirements(movekey)
         if head_location is not None:
             self.add_head(Node(head_location))
-            if not self.is_growing:  # remove tail
+            if not self.get_is_eating():  # remove tail
                 self.rem_tail()
             return True
         return False
