@@ -176,7 +176,7 @@ class Board:
         if self.__snake:
             for cell in self.__snake.get_coordinates():
                 if self.in_borders(cell):
-                    self.__taken[cell] = self.snake
+                    self.__taken[cell] = self.__snake
         for apple in self.__apples:
             self.__taken[apple.get_location()] = apple
         for bomb in self.__bombs:
