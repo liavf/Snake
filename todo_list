@@ -28,6 +28,16 @@ Board:
 
 
 
+- add ...
+- move snake... (assuiming it can)
+- is_growing()
+- remove_apple
+
+
+-
+-
+
+
 
 Snake:
 init(self, size, direction, head_location):
