@@ -13,6 +13,8 @@ SNAKE = "Snake"
 COLORS_DICT = {APPLE: GREEN, BOMB: RED, SHOCKWAVE: ORANGE, SNAKE: BLACK}
 
 def main_loop(gd: GameDisplay) -> None:
+
+
     gd.show_score(0)
     x, y = 10, 10
     while True:

@@ -1,7 +1,7 @@
 
 class Bomb:
-    def __init__(self, x, y, radius, time):
-        self.location = (x, y)
+    def __init__(self, location, radius, time):
+        self.location = location
         self.radius = radius
         self.time = time
         self.shock_location = self.location

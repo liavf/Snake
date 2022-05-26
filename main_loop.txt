@@ -2,7 +2,9 @@
 init:
 board.add_snake_to_board()
 board.add_bomb()
+
 for i in range(3):
+    #location, score = get_apple_parameters()
     board.add_apple()
 end_round
 

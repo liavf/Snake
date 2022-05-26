@@ -1,21 +1,42 @@
 
 class Board:
-    def __init__(self, snake, width, height):
+    def __init__(self, width, height):
         self.snake = snake
         self.apples = []
-        self.bomb = None
+        self.bombs = []
         self.width = width
         self.height = height
-        self.taken_coordinates = {}
+        self.taken = {}
+
+    #### getters ####
+    def get_apples(self):
+        return self.apples
+
+    def get_bombs(self):
+        return self.bombs
+
+    def get_taken(self):
+        return self.taken
+
+    def cell_content(self, location):
+        if location in self.taken:
+            return self.taken[location]
+        else:
+            return None
+
+    def get_empty_cells_num(self):
+        return (self.width * self.height) - len(self.taken)
+
+    #### checkers ####
 
     def legal_add(self, cells):
         for cell in cells:
-            if not (self.check_borders(cell) and self.is_empty(cell)):
-                return False
-        return True
+            if self.check_borders(cell) and cell not in self.get_taken():
+                return True
+        return False
 
-    def check_borders(self, loc):
-        x, y = loc
+    def check_borders(self, location):
+        x, y = location
         if x < 0 or x >= self.height:
             return False
         if y < 0 or y >= self.width:
@@ -23,53 +44,53 @@ class Board:
         return True
 
     def check_empty(self, loc):
-        if loc in self.taken_coordinates.keys():
+        if loc in self.taken:
             return False
         else:
             return True
 
-    def add_snake_to_board(self):
-        if self.lagal_add(snake.get_coordinates()):
-            for cell in self.snake.get_coordinates():
-                self.taken_coordinates[cell] = snake
+    #### setters - add ####
 
-    def add_apple(self):
-        location, score = get_apple_parameters()
+    def add_snake_to_board(self, snake):
+        if self.legal_add(snake.get_coordinates()):
+            self.snake = snake
+
+    def add_apple(self, params):
+        location, score = params.get_apple_parameters()
         while not self.legal_add(location):
-            location, score = get_apple_parameters()
+            location, score = params.get_apple_parameters()
         apple = Apple(location, score)
-        self.taken_coordinates[location] = apple
         self.apples.append(apple)
 
-    def add_bomb(self):
-        x, y, radius, time = get_bomb_parameters()
+    def add_bomb(self, params):
+        x, y, radius, time = params.get_bomb_parameters()
         while not self.legal_add((x, y)):
-            x, y, radius, time = get_apple_parameters()
+            x, y, radius, time = params.get_apple_parameters()
         bomb = Bomb(x, y, radius, time)
-        self.taken_coordinates[(x, y)] = bomb
-        self.bomb = bomb
+        self.bombs.append(bomb)
 
+    ## setters - del ##
     def del_bomb(self):
-        del self.taken_coordinates[(self.bomb.x, self.bomb.y)]
-        self.bomb = None
+        self.bombs.remove(bomb)
 
     def del_apple(self, apple):
-        del self.taken_coordinates[apple.location]
         self.apples.remove(apple)
 
-    def get_apples(self):
-        return self.apples
-
-    def cell_content(self, location):
-        if location in self.taken_coordinates:
-            return self.taken_coordinates[location]
-        else:
-            return None
-
-    def get_empty_cells_num(self):
-        return (self.width * self.height) - len(self.taken_coordinates)
-
+    ## setters - update ##
+    #todo: needed?
     def move_snake(self, movekey):
         return self.snake.move_snake(movekey)
+
+    def update_taken(self):
+        """
+        updates taken coordinates (assuming there is no overlap )
+        :return:
+        """
+        self.taken[snake.get_coordinates()] = snake
+        for apple in self.get_apples():
+            self.taken[apple.get_location()] = apple
+        for bomb in self.bombs():
+            self.taken[bombs.get_location()] = bomb
+
 
 
