@@ -20,7 +20,7 @@ class Bomb:
 
     def get_shock_couples(self):
         couples = []
-        for i in range(self.shock_timer):
+        for i in range(self.shock_timer + 1):
             couples.append((i, self.shock_timer - i))
         return couples
 
@@ -29,10 +29,10 @@ class Bomb:
         coup_list = []
         for coup in self.get_shock_couples():
             first, second = coup
-            a = (x + first, y)
-            b = (x - first, y)
-            c = (x, y + second)
-            d = (x, y - second)
+            a = (x + first, y + second)
+            b = (x + first, y - second)
+            c = (x - first, y + second)
+            d = (x - first, y - second)
             for i in [a,b,c,d]:
                 if i not in coup_list:
                     coup_list.append(i)
@@ -45,8 +45,8 @@ class Bomb:
             return False
 
     def get_location(self):
-        if self.time >= 0:
-            return self.location
+        if not self.is_shock:
+            return [self.location]
         else:
             return self.get_shock_location()
 

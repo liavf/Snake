@@ -8,6 +8,3 @@ class Apple:
         return self.score
 
 
-a = Apple
-type(a)
-
