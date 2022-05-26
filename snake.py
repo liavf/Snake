@@ -3,50 +3,108 @@ RIGHT = "Right"
 UP = "Up"
 DOWN = "Down"
 MOVEKEYS = [LEFT, RIGHT, UP, DOWN]
+from typing import List, Tuple, Any, Optional
+Location = Tuple[int, int]
 
 class Node:
-    def __init__(self, location=None, next=None, prev=None):
-        self.location = location
-        self.next = next
-        self.prev = prev
+    """
+    Node class for snake linked list
+    """
+    def __init__(self, location: Optional[Location] = None):
+        """
+        Initializes node object
+        :param location: node location
+        """
+        self.__location = location
+        self.__next = None
+        self.__prev = None
 
-    def get_location(self):
-        return self.location
 
-    def get_next(self):
-        return self.next
+    ## getters ##
+    def get_location(self) -> Location:
+        """
+        :return: node location
+        """
+        return self.__location
 
-    def get_prev(self):
-        return self.prev
+    def get_next(self) -> Any:
+        """
+        :return: next node object
+        """
+        return self.__next
 
-    def set_location(self, location):
-        self.location = location
+    def get_prev(self) -> Any:
+        """
+        :return: previous node object
+        """
+        return self.__prev
 
-    def set_next(self, next):
-        self.next = next
+    ## setters ##
+    def set_location(self, location: Location):
+        """
+        Sets node location
+        :param location: new location for node
+        """
+        self.__location = location
 
-    def set_prev(self, prev):
-        self.prev = prev
+    def set_next(self, next: Any):
+        """
+        Sets node next pointer
+        :param next: next node to point to
+        """
+        self.__next = next
+
+    def set_prev(self, prev: Any):
+        """
+        Sets node previous pointer
+        :param next: previous node to point to
+        """
+        self.__prev = prev
 
 
 class Snake:
-    def __init__(self, head=None, direction=UP):
-        self.head = self.tail = head
-        self.length = 0
-        self.direction = direction
-        self.apple_timer = 0
+    """
+    Snake class for snake game, linked lists of nodes
+    """
+    def __init__(self, direction: str, head: Any = None):
+        """
+        Initializes snake class
+        :param direction: starting direction for snake
+        :param head: head node object for snake
+        """
+        self.__head = self.__tail = head
+        self.__direction = direction
+        self.__length = 0
+        self.__apple_timer = 0
 
-    def get_head(self):
-        return self.head
+    ## getters ##
+    def get_head(self) -> Any:
+        """
+        :return: head node
+        """
+        return self.__head
 
-    def set_apple_timer(self, time):
+    ## setters
+    def set_apple_timer(self, time: int):
+        """
+        Adds time to apple timer
+        :param time: time
+        :return:
+        """
         self.apple_timer += time
+
+    def is_eating(self):
+        """
+        Checks if the snake is eating based on apple timer
+        :return: True for eating, False for none
+        """
+        return self.apple_timer > 0
+
+
 
     def update_apple_timer(self):
         self.apple_timer -= 1
 
-    def get_is_eating(self):
-        return self.apple_timer > 0
 
     def add_head(self, new_head):
         if self.head is None:
@@ -133,7 +191,7 @@ class Snake:
         head_location = self.movement_requirements(movekey)
         if head_location is not None:
             self.add_head(Node(head_location))
-            if not self.get_is_eating():
+            if not self.is_eating():
                 self.rem_tail()
             self.update_direction(movekey)
             return True

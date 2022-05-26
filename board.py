@@ -1,8 +1,10 @@
 from apple import *
 from bomb import *
 from game_parameters import *
-from typing import List, Tuple, Any
-Location = Tuple(int, int)
+from typing import List, Tuple, Any, Dict
+Location = Tuple[int, int]
+
+
 
 
 class Board:
@@ -10,6 +12,11 @@ class Board:
     Board class for snake game, containing snake, bombs and apples
     """
     def __init__(self, width: int, height: int):
+        """
+        Initialized board object
+        :param width: board width
+        :param height: board hight
+        """
         self.__apples = []
         self.__bombs = []
         self.__width = width
@@ -156,16 +163,13 @@ class Board:
         if self.__snake:
             for cell in self.__snake.get_coordinates():
                 if self.in_borders(cell):
-                    self.taken[cell] = self.snake
+                    self.__taken[cell] = self.snake
         for apple in self.__apples:
-            self.taken[apple.get_location()] = apple
+            self.__taken[apple.get_location()] = apple
         for bomb in self.__bombs:
             for cell in bomb.get_location():
                 if self.in_borders(cell):
-                    self.taken[cell] = bomb
-
-    def remove_snake(self):
-        self.snake = None
+                    self.__taken[cell] = bomb
 
 
 

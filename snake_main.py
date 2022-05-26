@@ -1,6 +1,6 @@
 
 from game_display import GameDisplay
-from snakey import *
+from snake import *
 from board import *
 
 RED = "red"
