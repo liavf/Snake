@@ -1,4 +1,4 @@
-from game_parameters import *
+
 from game_display import GameDisplay
 from snakey import *
 from board import *
@@ -12,6 +12,8 @@ BOMB = "Bomb"
 SHOCKWAVE = "Shockwave"
 SNAKE = "Snake"
 
+APPLE_NUM = 3
+
 COLORS_DICT = {APPLE: GREEN, BOMB: RED, SHOCKWAVE: ORANGE, SNAKE: BLACK}
 
 def init_board():
@@ -20,7 +22,7 @@ def init_board():
     snake.add_last(Node((WIDTH//2, (HEIGHT//2)-1)))
     snake.add_last(Node((WIDTH//2, (HEIGHT//2)-2)))
     board.add_snake(snake)
-    for i in range(3):
+    for i in range(APPLE_NUM):
         board.add_apple()
     board.add_bomb()
     return board
@@ -54,6 +56,7 @@ def main_loop(gd: GameDisplay) -> None:
     cur_score = 0
     gd.show_score(cur_score)
     while is_playing:
+        # draw_cells(board, gd)
         movekey = gd.get_key_clicked()
         if movekey is None or not board.snake.is_legal_direction(movekey):
             movekey = board.snake.direction
@@ -71,7 +74,7 @@ def main_loop(gd: GameDisplay) -> None:
                 board.del_apple(obj)
                 board.snake.set_apple_timer(3)
             elif type(obj).__name__ == BOMB:
-                board.remove_snake()
+                board.taken[head] = obj
                 is_playing = False
             elif type(obj).__name__ == SNAKE and not obj == head:
                 is_playing = False
@@ -86,7 +89,7 @@ def main_loop(gd: GameDisplay) -> None:
                         if type(obj).__name__ == APPLE:
                             board.del_apple(obj)
                         if type(obj).__name__ == SNAKE:
-                            board.remove_snake()
+                            board.taken[head] = obj
                             is_playing = False
             if bomb.finished():
                 board.del_bomb(bomb)
@@ -103,4 +106,5 @@ def main_loop(gd: GameDisplay) -> None:
         if board.get_empty_cells_num() == 0:
             is_playing = False
         gd.end_round()
+    # draw_cells(board, gd)
     # gd.end_round()
