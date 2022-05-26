@@ -50,5 +50,5 @@ class Bomb:
         else:
             return self.get_shock_location()
 
-    def get_shock_state(self):
+    def get_is_shock(self):
         return self.is_shock
