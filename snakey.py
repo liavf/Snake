@@ -30,9 +30,8 @@ class Node:
 
 
 class Snake:
-    def __init__(self, head=None, tail=None, direction):
-        self.head = head
-        self.tail = tail
+    def __init__(self, head=None, direction=UP):
+        self.head = self.tail = head
         self.length = 0
         self.direction = direction
         self.apple_timer = 0
@@ -42,6 +41,9 @@ class Snake:
 
     def set_apple_timer(self, time):
         self.apple_timer += time
+
+    def update_apple_timer(self):
+        self.apple_timer -= 1
 
     def get_is_eating(self):
         return self.apple_timer > 0
@@ -65,7 +67,7 @@ class Snake:
         self.length += 1
 
     def rem_tail(self):
-        last = self.tail.get_data()
+        # last = self.tail.location
         self.tail = self.tail.get_prev()
         if self.tail is None:
             self.head = None
@@ -73,14 +75,14 @@ class Snake:
             self.tail.next.set_prev(None)
             self.tail.set_next(None)
         self.length -= 1
-        return last
+        # return last
 
     def get_coordinates(self):
         coords = []
         cur = self.head
         while cur is not None:
             coords.append(cur.get_location())
-            cur = cur.next()
+            cur = cur.get_next()
         return coords
 
     def is_empty(self):
@@ -95,7 +97,7 @@ class Snake:
         :param movekey:
         :return:
         """
-        head_location = self.get_head()
+        head_location = self.get_head().location
         if movekey == UP and self.direction != DOWN:
             return head_location[0], head_location[1] + 1
         elif movekey == DOWN and self.direction != UP:
@@ -106,6 +108,18 @@ class Snake:
             return head_location[0] + 1, head_location[1]
         else: #unkown move
             return None
+
+    def is_legal_direction(self, movekey):
+        if movekey == UP and self.direction == DOWN:
+            return False
+        elif movekey == DOWN and self.direction == UP:
+            return False
+        elif movekey == LEFT and self.direction == RIGHT:
+            return False
+        elif movekey == RIGHT and self.direction == LEFT:
+            return False
+        else:
+            return True
 
     def move_snake(self, movekey):
         """
@@ -119,9 +133,9 @@ class Snake:
         head_location = self.movement_requirements(movekey)
         if head_location is not None:
             self.add_head(Node(head_location))
-            if not self.get_is_eating():  # remove tail
+            if not self.get_is_eating():
                 self.rem_tail()
-            self.update_direction()
+            self.update_direction(movekey)
             return True
         return False
 
