@@ -8,6 +8,6 @@ class Apple:
         return self.score
 
 
-a = Apple
-type(a)
+a = Apple(False, False)
+print(type(a) == "Apple")
 
