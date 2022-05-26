@@ -152,14 +152,14 @@ class Board:
         Updates taken coordinates based on board content, assuming there is no
         overlaps.
         """
-        self.taken = {} #
-        if self.snake:
-            for cell in self.snake.get_coordinates():
+        self.__taken = {} #eliminates preivous taken
+        if self.__snake:
+            for cell in self.__snake.get_coordinates():
                 if self.in_borders(cell):
                     self.taken[cell] = self.snake
-        for apple in self.get_apples():
+        for apple in self.__apples:
             self.taken[apple.get_location()] = apple
-        for bomb in self.bombs:
+        for bomb in self.__bombs:
             for cell in bomb.get_location():
                 if self.in_borders(cell):
                     self.taken[cell] = bomb
