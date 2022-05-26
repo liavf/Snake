@@ -60,11 +60,11 @@ def main_loop(gd: GameDisplay) -> None:
         movekey = gd.get_key_clicked()
         if movekey is None or not board.snake.is_legal_direction(movekey):
             movekey = board.snake.direction
-        board.move_snake(movekey)
+        board.snake.move_snake(movekey)
         if board.snake.get_is_eating():
             board.snake.update_apple_timer()
         head = board.snake.get_head().get_location()
-        if not (board.check_borders(head)):
+        if not (board.in_borders(head)):
             is_playing = False
         if head in board.get_taken():
             obj = board.taken[head]
@@ -97,14 +97,15 @@ def main_loop(gd: GameDisplay) -> None:
         #update
         board.update_taken()
         for i in range(3-len(board.get_apples())):
-            board.add_apple()
+            if not board.add_apple(): # no more place for apple
+                is_playing = False
         for i in range(1-len(board.get_bombs())):
-            board.add_bomb()
+            if not board.add_bomb(): # no more place for bomb
+                is_playing = False
 
         draw_cells(board, gd)
 
-        if board.get_empty_cells_num() == 0:
-            is_playing = False
+
         gd.end_round()
     # draw_cells(board, gd)
     # gd.end_round()
