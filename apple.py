@@ -5,7 +5,7 @@ class Apple:
     """
     Apple class for snake game
     """
-    def __init__(self, location: Location, score: int):
+    def __init__(self, location: Location, score: int) -> None:
         """
         Initialized apple class
         :param location: apple location

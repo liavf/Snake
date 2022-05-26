@@ -2,16 +2,16 @@ from apple import *
 from bomb import *
 from game_parameters import *
 from typing import List, Tuple, Any, Dict
+
 Location = Tuple[int, int]
-
-
 
 
 class Board:
     """
     Board class for snake game, containing snake, bombs and apples
     """
-    def __init__(self, width: int, height: int):
+
+    def __init__(self, width: int, height: int) -> None:
         """
         Initialized board object
         :param width: board width
@@ -25,13 +25,19 @@ class Board:
         self.__snake = None
 
     #### getters ####
-    def get_apples(self) -> List:
+    def get_snake(self) -> Any:
+        """
+        :return: snake object
+        """
+        return self.__snake
+
+    def get_apples(self) -> List[Any]:
         """
         :return: apples list
         """
         return self.__apples
 
-    def get_bombs(self) -> List:
+    def get_bombs(self) -> List[Any]:
         """
         :return: bombs list
         """
@@ -89,7 +95,7 @@ class Board:
 
     #### setters - add ####
 
-    def add_snake(self, snake: Any):
+    def add_snake(self, snake: Any) -> None:
         """
         Adds snake in board
         :param snake: Snake class object
@@ -111,10 +117,9 @@ class Board:
                 x, y, score = get_random_apple_data()
             apple = Apple((x, y), score)
             self.__apples.append(apple)
-            self.__taken[(x,y)] = apple
+            self.__taken[(x, y)] = apple
             return True
         return False
-
 
     def add_bomb(self) -> bool:
         """
@@ -128,19 +133,19 @@ class Board:
                 x, y, radius, time = get_random_bomb_data()
             bomb = Bomb((x, y), radius, time)
             self.__bombs.append(bomb)
-            self.__taken[(x,y)] = bomb
+            self.__taken[(x, y)] = bomb
             return True
         return False
 
     ## setters - del ##
-    def del_bomb(self, bomb: Any):
+    def del_bomb(self, bomb: Any) -> None:
         """
         Removes bomb from board
         :param bomb: Bomb class object
         """
         self.__bombs.remove(bomb)
 
-    def del_apple(self, apple: Any):
+    def del_apple(self, apple: Any) -> None:
         """
         Removes apple from board
         :param bomb: Apple class object
@@ -154,12 +159,20 @@ class Board:
         """
         return self.__taken
 
-    def update_taken(self):
+    def update_location(self, location: Location, object: Any) -> None:
+        """
+        Adds object in given location to taken cells dictionary
+        :param location: location to add
+        :param object: object to add
+        """
+        self.__taken[location] = object
+
+    def update_taken(self) -> None:
         """
         Updates taken coordinates based on board content, assuming there is no
         overlaps.
         """
-        self.__taken = {} #eliminates preivous taken
+        self.__taken = {}  # eliminates preivous taken
         if self.__snake:
             for cell in self.__snake.get_coordinates():
                 if self.in_borders(cell):
