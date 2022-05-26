@@ -121,5 +121,9 @@ class Snake:
             self.add_head(Node(head_location))
             if not self.get_is_eating():  # remove tail
                 self.rem_tail()
+            self.update_direction()
             return True
         return False
+
+    def update_direction(self, movekey):
+        self.direction = movekey
