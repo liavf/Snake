@@ -6,7 +6,7 @@ from typing import Any, Optional, List, Tuple, Dict
 import game_parameters
 
 CELL_SIZE = 15
-ROUND_TIME = 0.3
+ROUND_TIME = 0.5
 
 
 class GameDisplay:

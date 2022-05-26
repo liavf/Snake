@@ -1,54 +1,92 @@
 
-class Bomb:
-    def __init__(self, location, radius, time):
-        self.location = location
-        self.radius = radius
-        self.time = time
-        self.shock_location = self.location
-        self.is_shock = False
-        self.shock_timer = 0
+from typing import List, Tuple
+Location = Tuple[int, int]
 
-    def get_time(self):
-        return self.time
+class Bomb:
+    """
+    this is a bomb class
+    """
+    def __init__(self, location: Location, radius: int, time: int):
+        """
+        inits a bomb object (with random params)
+        :param location: bombs location
+        :param radius: bombs radius when in shock
+        :param time: bombs time until shock
+        """
+        self.__location = location
+        self.__radius = radius
+        self.__time = time
+        self.__shock_timer = 0
+
+    def get_time(self) -> int:
+        """
+        :return: bomb time
+        """
+        return self.__time
 
     def update_timer(self):
-        if self.time > 0:
-            self.time -= 1
+        """
+        updates timer every round depending on shock state
+        if not in shock - dec timer
+        if in shock - dec shock timer
+        when timer reaches zero - switch to chock mode
+        """
+        if self.__time >= 0:
+            self.__time -= 1
         else:
-            self.shock_timer += 1
-            self.is_shock = True
+            self.__shock_timer += 1
 
-    def get_shock_couples(self):
+    def get_shock_couples(self) -> List[Tuple[int, int]]:
+        """
+        gets couple in range which add to manhattan value
+        :return: all relevant couples for calculating shock
+        """
         couples = []
-        for i in range(self.shock_timer + 1):
-            couples.append((i, self.shock_timer - i))
+        current_radius = self.__shock_timer
+        for i in range(current_radius + 1):
+            couples.append((i, current_radius - i))
         return couples
 
-    def get_shock_location(self):
-        x, y = self.location
-        coup_list = []
+    def get_shock_location(self) -> List[Location]:
+        """
+        gets all locations of shock according to current radius
+        :return: shock locations
+        """
+        x, y = self.__location
+        coup_list = set()
         for coup in self.get_shock_couples():
             first, second = coup
-            a = (x + first, y + second)
-            b = (x + first, y - second)
-            c = (x - first, y + second)
-            d = (x - first, y - second)
-            for i in [a,b,c,d]:
-                if i not in coup_list:
-                    coup_list.append(i)
-        return coup_list
+            # all possible combinations
+            coup_list.add((x + first, y + second))
+            coup_list.add((x + first, y - second))
+            coup_list.add((x - first, y + second))
+            coup_list.add((x - first, y - second))
+        return list(coup_list)
 
-    def finished(self):
-        if self.shock_timer == self.radius:
+    def finished(self) -> bool:
+        """
+        checks if bomb finished shock wave
+        :return: True / False
+        """
+        if self.__shock_timer == self.__radius:
             return True
         else:
             return False
 
-    def get_location(self):
-        if not self.is_shock:
-            return [self.location]
+    def is_shock(self) -> bool:
+        """
+        checks if bomb switched to shock mode
+        :return: True / False
+        """
+        return self.__time < 0
+
+    def get_location(self) -> List[Location]:
+        """
+        returns bomb's location - reg / shock
+        :return: location (one or more)
+        """
+        if not self.is_shock():
+            return [self.__location]
         else:
             return self.get_shock_location()
 
-    def get_is_shock(self):
-        return self.is_shock
