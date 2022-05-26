@@ -4,7 +4,13 @@ from game_display import GameDisplay
 RED = "red"
 BLACK = "black"
 ORANGE = "orange"
+GREEN = "green"
+APPLE = "Apple"
+BOMB = "Bomb"
+SHOCKWAVE = "Shockwave"
+SNAKE = "Snake"
 
+COLORS_DICT = {APPLE: GREEN, BOMB: RED, SHOCKWAVE: ORANGE, SNAKE: BLACK}
 
 def main_loop(gd: GameDisplay) -> None:
     gd.show_score(0)
@@ -20,10 +26,20 @@ def main_loop(gd: GameDisplay) -> None:
 
 
 def draw_cells(board, gd: GameDisplay):
-    taken_locations = board.get_taken_locations()
+    """
+    Draws board in game display
+    :param board: board object
+    :param gd:
+    :return:
+    """
+    taken_locations = board.get_taken_coordinates()
     for location in taken_locations:
-        if type(taken_locations[location])== type(apple:
-            dg.
-
-
-<object
+        if type(taken_locations[location]) == APPLE:
+            gd.draw_cell(location[0], location[1], COLORS_DICT[APPLE])
+        elif type(taken_locations[location]) == SNAKE:
+            gd.draw_cell(location[0], location[1], COLORS_DICT[SNAKE])
+        else: #bomb
+            if bomb.get_is_shock():
+                gd.draw_cell(location[0], location[1], COLORS_DICT[SHOCKWAVE])
+            else: #BOMB
+                gd.draw_cell(location[0], location[1], COLORS_DICT[BOMB])

@@ -10,6 +10,12 @@ class Snake:
         self.coordinates = coordinates
         self.is_growing = is_growing
 
+    def ate_apple(self):
+        self.is_growing = True
+
+    def finished_growing(self):
+        self.is_growing = False
+
     def get_coordinates(self, coordinates):
         return self.coordinates
 
