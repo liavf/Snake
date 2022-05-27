@@ -196,7 +196,8 @@ def main_loop(gd: GameDisplay) -> None:
         board.get_snake().move_snake(movekey)
         board.get_snake().update_apple_timer()
         is_playing, cur_score = head_landing_logic(board, is_playing, cur_score, gd)
-        is_playing = bomb_logic(board, is_playing)
+        if is_playing:
+            is_playing = bomb_logic(board, is_playing)
         is_playing = fill_missing_objects(board, is_playing)
         draw_cells(gd, board)
         gd.end_round()
