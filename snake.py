@@ -86,6 +86,12 @@ class Snake:
         """
         return self.__head
 
+    def get_direction(self) -> str:
+        """
+        :return: direction
+        """
+        return self.__direction
+
     def get_tail(self) -> Any:
         """
         :return: tail node
@@ -139,8 +145,8 @@ class Snake:
         if self.__tail is None:
             self.__head = new_tail
         else:
-            self.__tail.next = new_tail
-            new_tail.prev = self.__tail
+            self.__tail.set_next(new_tail)
+            new_tail.set_prev(self.__tail)
         self.__tail = new_tail
 
     ## movement ##
@@ -153,7 +159,7 @@ class Snake:
         if self.__tail is None:
             self.__head = None
         else:
-            self.__tail.next.set_prev(None)
+            self.__tail.get_next().set_prev(None)
             self.__tail.set_next(None)
 
     # def __update_direction(self, movekey):
@@ -211,6 +217,6 @@ class Snake:
         """
         new_head_location = self.__movement_requirements(movekey)
         self.add_head(Node(new_head_location))
-        if not self.is_eating():
+        if not self.__is_eating():
             self.__rem_tail()
         self.__direction = movekey
