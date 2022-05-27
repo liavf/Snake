@@ -13,11 +13,13 @@ class Apple:
         """
         self.__location = location
         self.__score = score
+
     def get_location(self) -> Tuple:
         """
         :return: apple location
         """
         return self.__location
+
     def get_score(self) -> int:
         """""
         :return: apple score

@@ -94,7 +94,6 @@ class Board:
     #         return True
 
     #### setters - add ####
-
     def add_snake(self, snake: Any) -> None:
         """
         Adds snake in board

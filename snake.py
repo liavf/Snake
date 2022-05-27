@@ -149,7 +149,10 @@ class Snake:
             new_tail.set_prev(self.__tail)
         self.__tail = new_tail
 
-    def rem_head(self):
+    def rem_head(self) -> None:
+        """
+        removes the snake's head
+        """
         self.__head = self.__head.get_next()
         if self.__head is None:
             self.__tail = None
@@ -157,14 +160,24 @@ class Snake:
             self.__head.get_prev().set_next(None)
             self.__head.set_prev(None)
 
-    def get_node_by_location(self, location):
+    def get_node_by_location(self, location: Location) -> Any:
+        """
+        return node in given location
+        :param location: wanted location
+        :return: relevant node
+        """
         cur = self.__head
         while cur:
             if cur.get_location() == location:
                 return cur
             cur = cur.get_next()
 
-    def rem_node(self, location):
+    def rem_node(self, location: Location) -> None:
+        """
+        removes node in given location
+        can work on head, tail, or middle
+        :param location: wanted location to remove
+        """
         node = self.get_node_by_location(location)
         if node == self.__head:
             self.rem_head()
@@ -177,7 +190,6 @@ class Snake:
             save_prev.set_next(save_next)
 
     ## movement ##
-
     def __rem_tail(self):
         """
         Cuts tail from snake
