@@ -123,7 +123,10 @@ def head_in_taken(gd, board, head, cur_score, is_playing):
         board.update_location(head, obj)
         is_playing = False
     elif obj_type == SNAKE:
-        is_playing = False
+        # check if location is in updates coordinates -
+        # if tail just left loction it is legal
+        if head in obj.get_coordinates():
+            is_playing = False
     return is_playing, cur_score
 
 def bomb_logic(board, is_playing):
@@ -175,6 +178,8 @@ def main_loop(gd: GameDisplay) -> None:
     cur_score = 0
     gd.show_score(cur_score)
     while is_playing:
+        # print(board.get_taken_coordinates())
+        draw_cells(gd, board)
         movekey = get_movekey(gd, board)
         board.get_snake().move_snake(movekey)
         board.get_snake().update_apple_timer()
@@ -182,5 +187,8 @@ def main_loop(gd: GameDisplay) -> None:
         is_playing = bomb_logic(board, is_playing)
         board.update_taken()
         is_playing = fill_missing_objects(board, is_playing)
-        draw_cells(gd, board)
+        # draw_cells(gd, board)
         gd.end_round()
+    # print(board.get_taken_coordinates())
+    # draw_cells(gd, board)
+    # gd.end_round()
