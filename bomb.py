@@ -31,7 +31,7 @@ class Bomb:
         if in shock - dec shock timer
         when timer reaches zero - switch to chock mode
         """
-        if self.__time >= 0:
+        if self.__time > 0:
             self.__time -= 1
         else:
             self.__shock_timer += 1
@@ -68,7 +68,7 @@ class Bomb:
         checks if bomb finished shock wave
         :return: True / False
         """
-        if self.__shock_timer == self.__radius:
+        if self.__shock_timer > self.__radius:
             return True
         else:
             return False
@@ -78,7 +78,7 @@ class Bomb:
         checks if bomb switched to shock mode
         :return: True / False
         """
-        return self.__time < 0
+        return self.__time <= 0
 
     def get_location(self) -> List[Location]:
         """

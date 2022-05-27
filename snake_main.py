@@ -42,9 +42,9 @@ def init_board() -> Any:
     board = Board(WIDTH, HEIGHT)
     snake = init_snake()
     board.add_snake(snake)
+    board.add_bomb()
     for i in range(APPLE_NUM):
         board.add_apple()
-    board.add_bomb()
     return board
 
 def draw_cells(gd: Any, board: Any) -> None:
@@ -103,6 +103,7 @@ def head_landing_logic(board, is_playing, cur_score, gd):
     """
     head_loc = board.get_snake().get_head().get_location()
     if not board.in_borders(head_loc):
+        print("out of borders")
         is_playing = False
     if head_loc in board.get_taken():
         is_playing, cur_score = head_in_taken(gd, board, head_loc, cur_score, is_playing)
@@ -120,12 +121,16 @@ def head_in_taken(gd, board, head, cur_score, is_playing):
     if obj_type == APPLE:
         cur_score = apple_logic(gd, board, obj, cur_score)
     elif obj_type == BOMB:
-        board.update_location(head, obj)
+        board.get_snake().rem_node(head)
+        # board.update_location(head, obj)
+        print("snake hit bomb")
         is_playing = False
     elif obj_type == SNAKE:
-        # check if location is in updates coordinates -
-        # if tail just left loction it is legal
-        if head in obj.get_coordinates():
+        # check if location is in updated coordinates -
+        # if tail just left location it is legal
+        if head in obj.get_coordinates() and not head == obj.get_head().get_location():
+            # print(obj.get_coordinates())
+            print("snake ate itself")
             is_playing = False
     return is_playing, cur_score
 
@@ -136,6 +141,7 @@ def bomb_logic(board, is_playing):
     also, removes finished bombs
     :return: is still alive
     """
+    hit = False
     for bomb in board.get_bombs():
         bomb.update_timer()
         if bomb.is_shock():
@@ -146,10 +152,17 @@ def bomb_logic(board, is_playing):
                     if type(obj).__name__ == APPLE:
                         board.del_apple(obj)
                     if type(obj).__name__ == SNAKE:
-                        board.update_location(shock, obj)
+                        board.get_snake().rem_node(shock)
+                        # board.update_location(shock, bomb)
+                        hit = True
+                        print("bomb hit snake", shock)
                         is_playing = False
-        if bomb.finished():
+        if bomb.finished() and not hit:
             board.del_bomb(bomb)
+            if not board.add_bomb():  # no more place for bomb
+                print("no room for bomb")
+                is_playing = False
+    board.update_taken()
     return is_playing
 
 def fill_missing_objects(board, is_playing):
@@ -160,9 +173,7 @@ def fill_missing_objects(board, is_playing):
     """
     for i in range(APPLE_NUM - len(board.get_apples())):
         if not board.add_apple() and (len(board.get_apples()) == 0):  # no more place for apple
-            is_playing = False
-    for i in range(BOMB_NUM - len(board.get_bombs())):
-        if not board.add_bomb():  # no more place for bomb
+            print("no room for apples")
             is_playing = False
     return is_playing
 
@@ -177,18 +188,17 @@ def main_loop(gd: GameDisplay) -> None:
     is_playing = True
     cur_score = 0
     gd.show_score(cur_score)
+    draw_cells(gd, board)
+    gd.end_round()
     while is_playing:
-        # print(board.get_taken_coordinates())
-        draw_cells(gd, board)
+        # draw_cells(gd, board)
         movekey = get_movekey(gd, board)
         board.get_snake().move_snake(movekey)
         board.get_snake().update_apple_timer()
         is_playing, cur_score = head_landing_logic(board, is_playing, cur_score, gd)
         is_playing = bomb_logic(board, is_playing)
-        board.update_taken()
         is_playing = fill_missing_objects(board, is_playing)
-        # draw_cells(gd, board)
+        draw_cells(gd, board)
         gd.end_round()
-    # print(board.get_taken_coordinates())
     # draw_cells(gd, board)
     # gd.end_round()

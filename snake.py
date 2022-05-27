@@ -149,6 +149,33 @@ class Snake:
             new_tail.set_prev(self.__tail)
         self.__tail = new_tail
 
+    def rem_head(self):
+        self.__head = self.__head.get_next()
+        if self.__head is None:
+            self.__tail = None
+        else:
+            self.__head.get_prev().set_next(None)
+            self.__head.set_prev(None)
+
+    def get_node_by_location(self, location):
+        cur = self.__head
+        while cur:
+            if cur.get_location() == location:
+                return cur
+            cur = cur.get_next()
+
+    def rem_node(self, location):
+        node = self.get_node_by_location(location)
+        if node == self.__head:
+            self.rem_head()
+        elif node == self.__tail:
+            self.__rem_tail()
+        else:
+            save_next = node.get_next()
+            save_prev = node.get_prev()
+            save_next.set_prev(save_prev)
+            save_prev.set_next(save_next)
+
     ## movement ##
 
     def __rem_tail(self):
