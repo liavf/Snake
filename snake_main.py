@@ -159,7 +159,7 @@ def fill_missing_objects(board, is_playing):
     :return: is finished
     """
     for i in range(APPLE_NUM - len(board.get_apples())):
-        if not board.add_apple():  # no more place for apple
+        if not board.add_apple() and (len(board.get_apples()) == 0):  # no more place for apple
             is_playing = False
     for i in range(BOMB_NUM - len(board.get_bombs())):
         if not board.add_bomb():  # no more place for bomb
