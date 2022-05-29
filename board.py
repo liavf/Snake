@@ -43,7 +43,7 @@ class Board:
         """
         return self.__bombs
 
-    def get_taken(self) -> List[Location]:
+    def get_taken(self) -> Dict[Location]:
         """
         :return: taken locations list of tuples [(x,y)]
         """
