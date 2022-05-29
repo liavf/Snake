@@ -180,6 +180,9 @@ def fill_missing_objects(board: Board, is_playing: bool) -> bool:
     for i in range(APPLE_NUM - len(board.get_apples())):
         if not board.add_apple() and (len(board.get_apples()) == 0):  # no more place for apple
             is_playing = False
+        else:
+            apple = board.get_apples()[-1]
+            board.update_location(apple.get_location(), apple)
     return is_playing
 
 def main_loop(gd: GameDisplay) -> None:
@@ -202,6 +205,7 @@ def main_loop(gd: GameDisplay) -> None:
         is_playing, cur_score = head_landing_logic(board, is_playing, cur_score, gd)
         if is_playing:
             is_playing = bomb_logic(board, is_playing)
-        is_playing = fill_missing_objects(board, is_playing)
+        if is_playing:
+            is_playing = fill_missing_objects(board, is_playing)
         draw_cells(gd, board)
         gd.end_round()

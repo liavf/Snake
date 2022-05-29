@@ -110,8 +110,8 @@ class Board:
         :return: True if succeeded, False if not (in case of zero valid
         locations for apple
         """
-        x, y, score = get_random_apple_data()
         if self.get_empty_cells_num() > 0:
+            x, y, score = get_random_apple_data()
             while not self.legal_add([(x, y)]):
                 x, y, score = get_random_apple_data()
             apple = Apple((x, y), score)
@@ -126,8 +126,8 @@ class Board:
         :return: True if succeeded, False if not (in case of zero valid
         locations for bomb
         """
-        x, y, radius, time = get_random_bomb_data()
         if self.get_empty_cells_num() > 0:
+            x, y, radius, time = get_random_bomb_data()
             while not self.legal_add([(x, y)]):
                 x, y, radius, time = get_random_bomb_data()
             bomb = Bomb((x, y), radius, time)
