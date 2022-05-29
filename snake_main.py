@@ -1,4 +1,3 @@
-
 from game_display import GameDisplay
 from snake import *
 from board import *
@@ -21,6 +20,7 @@ THIRD_SNAKE_NODE = (WIDTH // 2, (HEIGHT // 2) - 2)
 
 COLORS_DICT = {APPLE: GREEN, BOMB: RED, SHOCKWAVE: ORANGE, SNAKE: BLACK}
 
+
 def init_snake() -> Any:
     """
     inits snake with first nodes and direction
@@ -31,6 +31,7 @@ def init_snake() -> Any:
     snake.add_tail(Node(SECOND_SNAKE_NODE))
     snake.add_tail(Node(THIRD_SNAKE_NODE))
     return snake
+
 
 def init_board() -> Any:
     """
@@ -47,6 +48,7 @@ def init_board() -> Any:
     for i in range(APPLE_NUM):
         board.add_apple()
     return board
+
 
 def draw_cells(gd: GameDisplay, board: Board) -> None:
     """
@@ -65,6 +67,7 @@ def draw_cells(gd: GameDisplay, board: Board) -> None:
             color = COLORS_DICT[obj_type]
         gd.draw_cell(x, y, color)
 
+
 def get_movekey(gd: GameDisplay, board: Board) -> str:
     """
     gets user's keyboard choice if given
@@ -78,7 +81,9 @@ def get_movekey(gd: GameDisplay, board: Board) -> str:
         movekey = board.get_snake().get_direction()
     return movekey
 
-def apple_logic(gd: GameDisplay, board: Board, apple: Apple, cur_score: int) -> int:
+
+def apple_logic(gd: GameDisplay, board: Board, apple: Apple,
+                cur_score: int) -> int:
     """
     if snake ate apple, fo the following:
     -update score
@@ -94,7 +99,9 @@ def apple_logic(gd: GameDisplay, board: Board, apple: Apple, cur_score: int) -> 
     board.get_snake().add_to_apple_timer(APPLE_TIME_ADD)
     return cur_score
 
-def head_landing_logic(board: Board, is_playing: bool, cur_score: int, gd) -> Tuple[bool, int]:
+
+def head_landing_logic(board: Board, is_playing: bool, cur_score: int, gd) -> \
+        Tuple[bool, int]:
     """
     handles head logic:
     -checks if in borders
@@ -106,11 +113,14 @@ def head_landing_logic(board: Board, is_playing: bool, cur_score: int, gd) -> Tu
     if not board.in_borders(head_loc):
         is_playing = False
     if head_loc in board.get_taken():
-        is_playing, cur_score = head_in_taken(gd, board, head_loc, cur_score, is_playing)
+        is_playing, cur_score = head_in_taken(gd, board, head_loc, cur_score,
+                                              is_playing)
     board.update_taken()
     return is_playing, cur_score
 
-def head_in_taken(gd: GameDisplay, board: Board, head: Location, cur_score: int, is_playing: bool) -> Tuple[bool, int]:
+
+def head_in_taken(gd: GameDisplay, board: Board, head: Location,
+                  cur_score: int, is_playing: bool) -> Tuple[bool, int]:
     """
     if head landed on something, react accordingly
     :param head: head location
@@ -131,7 +141,9 @@ def head_in_taken(gd: GameDisplay, board: Board, head: Location, cur_score: int,
             is_playing = False
     return is_playing, cur_score
 
-def shock_logic(shocks: List[Location], board: Board, hit: bool, is_playing: bool) -> Tuple[bool, bool]:
+
+def shock_logic(shocks: List[Location], board: Board, hit: bool,
+                is_playing: bool) -> Tuple[bool, bool]:
     """
     if bomb is in shock, checks to see if shock hit something
     :param shocks: all shock waves
@@ -150,6 +162,7 @@ def shock_logic(shocks: List[Location], board: Board, hit: bool, is_playing: boo
                 hit = True
                 is_playing = False
     return hit, is_playing
+
 
 def bomb_logic(board: Board, is_playing: bool) -> bool:
     """
@@ -171,6 +184,7 @@ def bomb_logic(board: Board, is_playing: bool) -> bool:
     board.update_taken()
     return is_playing
 
+
 def fill_missing_objects(board: Board, is_playing: bool) -> bool:
     """
     fills the bomb and apple capacity
@@ -178,12 +192,16 @@ def fill_missing_objects(board: Board, is_playing: bool) -> bool:
     :return: is finished
     """
     for i in range(APPLE_NUM - len(board.get_apples())):
-        if not board.add_apple() and (len(board.get_apples()) == 0):  # no more place for apple
+        # no more place for apples at all
+        if not board.add_apple() and (len(board.get_apples()) == 0):
             is_playing = False
         else:
+            # just change location of added apple
             apple = board.get_apples()[-1]
             board.update_location(apple.get_location(), apple)
+    # same logic for bomb can be added here (not needed for ex10)
     return is_playing
+
 
 def main_loop(gd: GameDisplay) -> None:
     """
@@ -202,7 +220,8 @@ def main_loop(gd: GameDisplay) -> None:
         movekey = get_movekey(gd, board)
         board.get_snake().move_snake(movekey)
         board.get_snake().update_apple_timer()
-        is_playing, cur_score = head_landing_logic(board, is_playing, cur_score, gd)
+        is_playing, cur_score = head_landing_logic(board, is_playing,
+                                                   cur_score, gd)
         if is_playing:
             is_playing = bomb_logic(board, is_playing)
         if is_playing:

@@ -149,7 +149,7 @@ class Snake:
             new_tail.set_prev(self.__tail)
         self.__tail = new_tail
 
-    def rem_head(self) -> None:
+    def __rem_head(self) -> None:
         """
         removes the snake's head
         """
@@ -180,7 +180,7 @@ class Snake:
         """
         node = self.get_node_by_location(location)
         if node == self.__head:
-            self.rem_head()
+            self.__rem_head()
         elif node == self.__tail:
             self.__rem_tail()
         else:
@@ -200,13 +200,6 @@ class Snake:
         else:
             self.__tail.get_next().set_prev(None)
             self.__tail.set_next(None)
-
-    # def __update_direction(self, movekey):
-    #     """
-    #     Updaes snake direction by movekey
-    #     :param movekey: direction to move
-    #     """
-    #     self.__direction = movekey
 
     def __is_eating(self) -> bool:
         """

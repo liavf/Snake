@@ -65,7 +65,7 @@ class Board:
         return (self.__width * self.__height) - len(self.__taken)
 
     #### checkers ####
-    def legal_add(self, cells: List[Location]) -> bool:
+    def __legal_add(self, cells: List[Location]) -> bool:
         """
         :param cells: cells to add an object in
         :return:
@@ -87,19 +87,13 @@ class Board:
             return False
         return True
 
-    # def check_empty(self, location: Location) -> Board:
-    #     if location in self.taken:
-    #         return False
-    #     else:
-    #         return True
-
     #### setters - add ####
     def add_snake(self, snake: Any) -> None:
         """
         Adds snake in board
         :param snake: Snake class object
         """
-        if self.legal_add(snake.get_coordinates()):
+        if self.__legal_add(snake.get_coordinates()):
             self.__snake = snake
             for cell in snake.get_coordinates():
                 self.__taken[cell] = snake
@@ -112,7 +106,7 @@ class Board:
         """
         if self.get_empty_cells_num() > 0:
             x, y, score = get_random_apple_data()
-            while not self.legal_add([(x, y)]):
+            while not self.__legal_add([(x, y)]):
                 x, y, score = get_random_apple_data()
             apple = Apple((x, y), score)
             self.__apples.append(apple)
@@ -128,7 +122,7 @@ class Board:
         """
         if self.get_empty_cells_num() > 0:
             x, y, radius, time = get_random_bomb_data()
-            while not self.legal_add([(x, y)]):
+            while not self.__legal_add([(x, y)]):
                 x, y, radius, time = get_random_bomb_data()
             bomb = Bomb((x, y), radius, time)
             self.__bombs.append(bomb)
@@ -171,7 +165,7 @@ class Board:
         Updates taken coordinates based on board content, assuming there is no
         overlaps.
         """
-        self.__taken = {}  # eliminates preivous taken
+        self.__taken = {}  # eliminates previous taken
         if self.__snake:
             for cell in self.__snake.get_coordinates():
                 if self.in_borders(cell):
@@ -182,6 +176,3 @@ class Board:
             for cell in bomb.get_location():
                 if self.in_borders(cell):
                     self.__taken[cell] = bomb
-
-
-
