@@ -175,13 +175,13 @@ def bomb_logic(board: Board, is_playing: bool) -> bool:
     for bomb in board.get_bombs():
         bomb.update_timer()
         if bomb.is_shock():
-            shocks = bomb.get_shock_location()
+            shocks = bomb.get_location()
             hit, is_playing = shock_logic(shocks, board, hit, is_playing)
-        if bomb.finished() and not hit:
-            board.del_bomb(bomb)
-            if not board.add_bomb():  # no more place for bomb
-                is_playing = False
-    board.update_taken()
+            if bomb.finished() and not hit:
+                board.del_bomb(bomb)
+                if not board.add_bomb():  # no more place for bomb
+                    is_playing = False
+            board.update_taken()
     return is_playing
 
 
@@ -193,10 +193,11 @@ def fill_missing_objects(board: Board, is_playing: bool) -> bool:
     """
     for i in range(APPLE_NUM - len(board.get_apples())):
         # no more place for apples at all
-        if not board.add_apple() and (len(board.get_apples()) == 0):
-            is_playing = False
+        if not board.add_apple():
+            if len(board.get_apples()) == 0:
+                is_playing = False
         else:
-            # just change location of added apple
+            # just update location of added apple
             apple = board.get_apples()[-1]
             board.update_location(apple.get_location(), apple)
     # same logic for bomb can be added here (not needed for ex10)

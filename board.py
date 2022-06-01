@@ -43,7 +43,7 @@ class Board:
         """
         return self.__bombs
 
-    def get_taken(self) -> Dict[Location]:
+    def get_taken(self) -> Dict[Location, Any]:
         """
         :return: taken locations list of tuples [(x,y)]
         """
@@ -137,6 +137,7 @@ class Board:
         :param bomb: Bomb class object
         """
         self.__bombs.remove(bomb)
+        self.update_taken()
 
     def del_apple(self, apple: Any) -> None:
         """
@@ -144,6 +145,7 @@ class Board:
         :param bomb: Apple class object
         """
         self.__apples.remove(apple)
+        del self.__taken[apple.get_location()]
 
     ## setters - update ##
     def get_taken_coordinates(self) -> Dict[Location, Any]:
